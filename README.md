@@ -160,7 +160,7 @@ IF it is launched inside that VPC
 
 👉 Linux instance successfully running with assigned public IP”
 
-![instance details1](screenshots/instance-details1.pngs)
+![instance details1](screenshots/instance-details1.png)
 
 
 ![instance details2](screenshots/instance-details2.png)

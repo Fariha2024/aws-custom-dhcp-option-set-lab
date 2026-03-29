@@ -1,0 +1,90 @@
+🔹 AWS Custom DHCP Option Set Lab – Commands
+
+==============================
+🔵 Phase 1: Create DHCP Option Set (Console)
+==============================
+# No CLI commands (Done via AWS Console)
+
+# Name: custom-dhcp-lab
+# Domain: lab.internal
+# DNS: 8.8.8.8, 8.8.4.4
+
+==============================
+🔵 Phase 2: Associate with VPC (Console)
+==============================
+# No CLI commands (Done via AWS Console)
+
+# Attach DHCP option set to Default VPC
+
+==============================
+🔵 Phase 3: Launch EC2 Instance
+==============================
+# No CLI commands (Done via AWS Console)
+
+# AMI: Amazon Linux
+# Instance type: t2.micro
+# VPC: Default VPC
+# Auto-assign Public IP: Enabled
+
+==============================
+🔵 Phase 4: Connect to EC2
+==============================
+
+ssh -i your-key.pem ec2-user@your-public-ip
+
+# Example:
+# ssh -i dhcp-lab-keypair.pem ec2-user@13.201.32.22
+
+==============================
+🔵 Phase 5: Verify DHCP Settings
+==============================
+
+cat /etc/resolv.conf
+
+# Expected Output:
+# search lab.internal
+# nameserver 8.8.8.8
+# nameserver 8.8.4.4
+
+hostname -f
+
+# Expected:
+# Shows domain with lab.internal
+
+==============================
+🔵 Phase 6: Renew DHCP (If Needed)
+==============================
+
+# Method 1 (if available)
+sudo dhclient -v
+
+# Method 2 (Amazon Linux 2023)
+sudo systemctl restart systemd-networkd
+
+==============================
+🔵 Alternative Method
+==============================
+
+# Stop and Start instance from AWS Console
+
+# After restart, reconnect using SSH:
+ssh -i your-key.pem ec2-user@your-public-ip
+
+==============================
+🔵 Final Verification
+==============================
+
+cat /etc/resolv.conf
+
+# Confirm:
+# DNS = 8.8.8.8, 8.8.4.4
+# Domain = lab.internal
+
+==============================
+🔵 Cleanup (Important)
+==============================
+
+# Terminate EC2 instance (Console)
+# Delete DHCP option set (Console)
+# Check Elastic IPs (Console)
+# Delete unused volumes (Console)
