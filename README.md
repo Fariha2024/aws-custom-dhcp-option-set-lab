@@ -76,11 +76,20 @@ aws-custom-dhcp-option-set-lab/
 . Name: custom-dhcp-lab
 . Domain name: lab.internal
 . DNS servers: 8.8.8.8, 8.8.4.4
-. NTP servers: time.google.com
 
-📸 Screenshot 1: DHCP option set creation form
+
+
+Create DHCP option set:
+![create dhcp](screenshots/create-dhcp.png)
+
+
+
+
+Fill details:
+![ DHCP option set creation form ](screenshots/dhcp-creation-form.png)
 
 5. Click Create
+
 
 
 
@@ -88,11 +97,33 @@ aws-custom-dhcp-option-set-lab/
 🔵 Phase 2: Associate DHCP Option Set with VPC
 
 1. Go to Your VPCs
-2. Select your VPC
+2. Select Default VPC
 3. Click Actions → Edit DHCP option set
 4. Choose custom-dhcp-lab
 
-📸 Screenshot 2: Association with VPC
+![Association with VPC](screenshots/associate-dhcp-with-vpc.png)
+
+
+
+![ select vpc for association ](screenshots/edit-vpc-settings.png)
+
+🔴 Important Rule
+
+👉 EC2 must be launched in the SAME VPC where DHCP option set is attached
+
+🔹 Before Going EC2
+
+✔️ YES — select Default VPC when launching EC2
+
+
+🔵 Why This Matters
+
+DHCP settings are applied per VPC, not per instance.
+
+👉 That means:
+
+EC2 will only get custom DNS/domain
+IF it is launched inside that VPC
 
 
 
@@ -107,11 +138,29 @@ aws-custom-dhcp-option-set-lab/
 4. Enable auto-assign public IP
 
 
-📸 Screenshot 3: Instance configuration
+
+![linux machine](screenshots/linux-machine.png)
+
+
+
+![select vpc, auto-assign ip](screenshots/default-vpc.png)
+
+
+
+👉 “The default VPC and auto-assigned public IP were automatically selected by AWS during instance configuration.”
+
+
 
 5. Launch instance
 
+![launched successfully](screenshots/launched-successfully.png)
 
+👉 Linux instance successfully running with assigned public IP”
+
+![instance details1](screenshots/instance-details1.pngs)
+
+
+![instance details2](screenshots/instance-details2.png)
 
 
 🔵 Phase 4: Connect to Instance
@@ -119,7 +168,10 @@ aws-custom-dhcp-option-set-lab/
 ssh -i your-key.pem ec2-user@your-public-ip
 
 
-📸 Screenshot 4: Successful SSH login
+![ Successful SSH login ](screenshots/successful-login.png)
+
+👉 “The EC2 connect interface confirms the default username (ec2-user) derived from the Amazon Linux AMI.”
+
 
 
 
@@ -135,31 +187,145 @@ Expected:
 
 DNS should show 8.8.8.8
 
-📸 Screenshot 5: DNS verification
+![ DNS verification ](screenshots/dns-verification.png)
 
 
 🔹 Check domain:
 
 hostname -f
 
-📸 Screenshot 6: Domain verification
+![domain check](screenshots/domain-check.png)
 
 
 
 
 🔵 Phase 6: Renew DHCP Lease (if needed)
 
+🔹 Check Detailed Network Info
+
 sudo dhclient -v
 
-📸 Screenshot 7: DHCP renewal logs
+🗣️ “Hey! Request new DHCP configuration”
+
+✔️ Fast
+✔️ No downtime
+✔️ Best method
+
+
+🔵 Why sudo dhclient or Stop/Start is Needed
+
+👉 Problem is NOT with your commands
+👉 Problem is HOW AWS applies DHCP changes
+
+🔴 The Real Reason
+
+When you:
+
+✔️ Created DHCP Option Set
+✔️ Associated it with VPC
+
+👉 AWS does NOT immediately update running instances
+
+🔥 Important Rule
+
+👉 DHCP settings are applied ONLY when instance requests new IP config
+
+🔵 What Happens Internally
+
+Your EC2 already had:
+
+. Old DHCP lease (default AWS DNS)
+. Old network configuration
+
+👉 So it keeps using old settings ❌
+
+🔵 Solution: Stop & Start (Hard Refresh)
+
+👉 When you:
+
+. Stop instance
+
+![instance stopped](screenshots/instance-stopped.png)
+
+
+✅ Description:
+
+“The EC2 instance was stopped to simulate a network reset and ensure that updated DHCP configuration settings could be applied upon restart.”
 
 
 
+. Start again
+
+![instance start](screenshots/instance-start.png)
+
+
+✅ Description:
+
+“The EC2 instance was started again to allow it to obtain updated DHCP settings, including the custom domain name and DNS servers from the associated DHCP option set.”
+
+
+⚠️ Remember
+
+✔️ New DHCP request automatically happens
+✔️ Fresh network config applied
+
+
+
+🔴 Why NOT just Reboot?
+
+👉 Reboot ≠ DHCP refresh ❌
+👉 It may keep old lease
+
+🔵 What likely happened in this case
+
+
+1. Launched EC2
+2. THEN applied DHCP option set
+
+➡️ So instance still using old config
+
+🔥 TL;DR
+
+👉 AWS doesn’t auto-update running instances
+👉 You must refresh DHCP:
+
+✔️ sudo dhclient (best)
+✔️ OR Stop/Start
+
+
+
+⚠️ Remember
+
+👉 No issue — just AWS behavior
+👉 You refresh DHCP because instance had old network config
+
+✅ must reconnect after stopping and starting the instance
+
+
+👉 “Amazon Linux 2023 does not include dhclient by default. Therefore, DHCP configuration was refreshed by restarting the instance, and verification was performed using resolv.conf.”
 
 🔵 Step 7: Renew DHCP
 
-📸 Screenshot required
+![restart server](screenshots/restart-server.png)
 
+
+🔵 What This Confirms
+
+👉 Your lab is 100% correct and complete ✅
+
+👉 ✔️ Your custom domain name is applied
+👉 ✔️ DNS applied
+👉 ✔️ DHCP FULLY WORKING 💯
+
+
+
+![final verification](screenshots/final-dhcp-verification.png)
+
+
+
+🔵 Lab Status
+
+“The DHCP configuration was successfully verified. The EC2 instance received the custom domain name (lab.internal) and DNS servers (8.8.8.8, 8.8.4.4), confirming that the custom DHCP option set is functioning correctly.”
 
 
 
@@ -244,6 +410,22 @@ EC2 instances now receive:
 . Sync time using custom NTP server
 
 
+
+🔵 Before vs After
+
+🔹 Before (Default)
+DNS: AmazonProvidedDNS
+Domain: ec2.internal
+
+🔹 After (Custom)
+DNS: 8.8.8.8
+Domain: lab.internal
+
+
+👉 “Default AWS DHCP option set was analyzed before applying custom configuration to understand baseline behavior.”
+
+
+![before and after](screenshots/before-and-after-dhcp-setup.png)
 
 ### 🔹 Real-World Use Case
 . Enterprise internal DNS integration
