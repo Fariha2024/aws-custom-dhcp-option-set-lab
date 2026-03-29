@@ -8,7 +8,7 @@ This assignment demonstrates how to configure a custom DHCP Option Set in AWS VP
 
 
 
-🔵 Core Capabilities Demonstrated
+### 🔹 Core Capabilities Demonstrated
 . Custom DHCP configuration in AWS
 . VPC networking fundamentals
 . DNS and domain configuration
@@ -17,30 +17,35 @@ This assignment demonstrates how to configure a custom DHCP Option Set in AWS VP
 
 
 
-🔵 AWS Services Used
+### 🔹 AWS Services Used
 . Amazon VPC
 . Amazon EC2
 . DHCP Option Sets
 
 
 
-🔵 Assignment Structure
-🔵 Phase 1: Create DHCP Option Set
-🔵 Phase 2: Associate with VPC
-🔵 Phase 3: Launch EC2 Instance
-🔵 Phase 4: Verify Configuration
-🔵 Phase 5: Troubleshooting & Renewal
+### 🔹 Assignment 
+
+🔹 Phase 1: Create DHCP Option Set
+
+🔹 Phase 2: Associate with VPC
+
+🔹 Phase 3: Launch EC2 Instance
+
+🔹 Phase 4: Verify Configuration
+
+🔹 Phase 5: Troubleshooting & Renewal
 
 
 
-🔵 Architecture Flow
 
+### 🔹 Architecture Flow
 
 User → AWS VPC → DHCP Option Set → EC2 Instance → Linux Network Config
 
 
 
-🔵 Project Folder Structure
+### 🔹 Project Folder Structure
 
 aws-custom-dhcp-option-set-lab/
 │
@@ -59,7 +64,7 @@ aws-custom-dhcp-option-set-lab/
 
 
 
-🔵 Implementation Steps
+### 🔹 Implementation Steps
 
 
 🔵 Phase 1: Create Custom DHCP Option Set
@@ -133,7 +138,7 @@ DNS should show 8.8.8.8
 📸 Screenshot 5: DNS verification
 
 
-Check domain:
+🔹 Check domain:
 
 hostname -f
 
@@ -158,7 +163,7 @@ sudo dhclient -v
 
 
 
-🔵 Visual Diagram    
+### 🔹 Visual Diagram    
 
         +---------------------+
         |   DHCP Option Set   |
@@ -177,20 +182,20 @@ sudo dhclient -v
         +---------------------+
 
 
-🔵 How It Works
+🔹 How It Works
 . AWS assigns network settings via DHCP
 . DHCP Option Set overrides default DNS/domain
 . EC2 instance receives configuration at boot
 . Linux system applies settings automatically        
 
 
-🔵 Updated Architecture (After Customization)
+### 🔹 Updated Architecture (After Customization)
 
-Before:
+🔹 Before:
 
 . Default AWS DNS
 
-After:
+🔹 After:
 
 . Custom DNS (Google)
 . Custom domain (lab.internal)
@@ -219,10 +224,12 @@ After:
 
 
 
-Explanation:
+🔹 Explanation:
 
 DHCP Option Set overrides default behavior
 EC2 instances now receive:
+
+
 ✅ Custom DNS → 8.8.8.8, 8.8.4.4
 ✅ Custom Domain → lab.internal
 ✅ Custom NTP → time.google.com
@@ -238,7 +245,7 @@ EC2 instances now receive:
 
 
 
-🔵 Real-World Use Case
+### 🔹 Real-World Use Case
 . Enterprise internal DNS integration
 . Hybrid cloud (on-prem + AWS)
 . Centralized time synchronization
@@ -246,14 +253,14 @@ EC2 instances now receive:
 
 
 
-🔵 Security Reminder
+### 🔹 Security Reminder
 . Avoid public DNS in sensitive environments
 . Use private DNS for internal workloads
 . Restrict EC2 SSH access (security groups)
 
 
 
-🔵 Common Mistakes to Avoid
+### 🔹 Common Mistakes to Avoid
 . Not associating DHCP set with VPC
 . Expecting changes without instance restart
 . Incorrect DNS IP format
@@ -261,7 +268,7 @@ EC2 instances now receive:
 
 
 
-🔵 TL;DR
+### 🔹 TL;DR
 . Create DHCP Option Set
 . Attach to VPC
 . Launch EC2
@@ -269,26 +276,26 @@ EC2 instances now receive:
 
 
 
-🔵 Things to Remember
+### 🔹 Things to Remember
 . One DHCP option set per VPC
 . Changes are not instant
 . Requires reboot or lease renewal
 
 
 
-🔵 Conclusion
+### 🔹 Conclusion
 
 This lab provides practical exposure to AWS networking and demonstrates how DHCP customization impacts EC2 instances in real-world environments.
 
 
 
-🔵 Post Lab Cleanup
+### 🔹 Post Lab Cleanup
 
 Delete all resources to avoid charges.
 
 
 
-🔵 Safe Deletion Order (IMPORTANT)
+### 🔹 Safe Deletion Order (IMPORTANT)
 . Terminate EC2 instance
 . Disassociate DHCP option set
 . Delete DHCP option set
