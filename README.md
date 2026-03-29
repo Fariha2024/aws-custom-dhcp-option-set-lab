@@ -18,8 +18,11 @@ This assignment demonstrates how to configure a custom DHCP Option Set in AWS VP
 
 
 ### 🔹 AWS Services Used
+
 . Amazon VPC
+
 . Amazon EC2
+
 . DHCP Option Sets
 
 
