@@ -478,7 +478,11 @@ Delete all resources to avoid charges.
 
 
 ### 🔹 Safe Deletion Order (IMPORTANT)
+
 . Terminate EC2 instance
+
 . Disassociate DHCP option set
+
 . Delete DHCP option set
+
 . Delete VPC (if created for lab)
